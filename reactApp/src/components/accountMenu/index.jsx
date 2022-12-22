@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -11,9 +12,12 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
+import AuthModal from '../authModal';
+import { setAuthModalOpen } from '../../redux/features/authModalSlice';
 
 const AccountMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const dispatch = useDispatch();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +28,7 @@ const AccountMenu = () => {
 
   return (
     <>
+      <AuthModal />
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
         <Tooltip title="Account settings">
           <IconButton
@@ -71,7 +76,7 @@ const AccountMenu = () => {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-        <MenuItem>
+        <MenuItem onClick={() => dispatch(setAuthModalOpen(true))}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />
