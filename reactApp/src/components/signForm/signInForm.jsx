@@ -5,96 +5,96 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import userApi from '../../api/modules/user.api.js';
+import { login } from '../../api/customApi';
 import { setAuthModalOpen } from '../../redux/features/authModalSlice';
-import { setUser } from '../../redux/features/userSlice';
+import { setUserInfo, setToken, setIsAuthenticated } from '../../redux/features/userSlice';
 
 const SigninForm = ({ switchFun }) => {
   const dispatch = useDispatch();
-
   const [isLoginRequest, setIsLoginRequest] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
 
   const signinForm = useFormik({
     initialValues: {
-      password: '',
       username: '',
+      password: '',
     },
     validationSchema: Yup.object({
       username: Yup.string()
-        .min(8, 'username minimum 8 characters')
-        .required('username is required'),
+        .min(3, 'username minimum 3 characters')
+        .required('Username is required.'),
       password: Yup.string()
-        .min(8, 'password minimum 8 characters')
-        .required('password is required'),
+        .min(5, 'password minimum 5 characters')
+        .required('Password is required.'),
     }),
     onSubmit: async (values) => {
       setErrorMessage(undefined);
       setIsLoginRequest(true);
-      console.log('asdasdasdasd');
-      const { response, err } = await userApi.signin(values);
+      const response = await login(values.username, values.password);
       setIsLoginRequest(false);
-
-      if (true) {
+      if (response.success) {
         signinForm.resetForm();
-        dispatch(setUser(response));
-        dispatch(setAuthModalOpen(false));
+        dispatch(setToken(response.token));
+        dispatch(setUserInfo(response.user));
+        dispatch(setIsAuthenticated(true));
         toast.success('Sign in success');
+        dispatch(setAuthModalOpen(false));
       }
-
-      if (err) setErrorMessage(err.message);
+      if (!response.success) setErrorMessage(response.msg);
     },
   });
 
   return (
-    <Box component="form" onSubmit={signinForm.handleSubmit}>
-      <Stack spacing={3}>
-        <TextField
-          type="text"
-          placeholder="username"
-          name="username"
+    <>
+      <Box component="form" onSubmit={signinForm.handleSubmit}>
+        <Stack spacing={3}>
+          <TextField
+            type="text"
+            placeholder="username"
+            name="username"
+            fullWidth
+            value={signinForm.values.username}
+            onChange={signinForm.handleChange}
+            color="success"
+            error={signinForm.touched.username && signinForm.errors.username !== undefined}
+            helperText={signinForm.touched.username && signinForm.errors.username}
+          />
+          <TextField
+            type="password"
+            placeholder="password"
+            name="password"
+            fullWidth
+            value={signinForm.values.password}
+            onChange={signinForm.handleChange}
+            color="success"
+            error={signinForm.touched.password && signinForm.errors.password !== undefined}
+            helperText={signinForm.touched.password && signinForm.errors.password}
+          />
+        </Stack>
+
+        <LoadingButton
+          type="submit"
           fullWidth
-          value={signinForm.values.username}
-          onChange={signinForm.handleChange}
-          color="success"
-          error={signinForm.touched.username && signinForm.errors.username !== undefined}
-          helperText={signinForm.touched.username && signinForm.errors.username}
-        />
-        <TextField
-          type="password"
-          placeholder="password"
-          name="password"
-          fullWidth
-          value={signinForm.values.password}
-          onChange={signinForm.handleChange}
-          color="success"
-          error={signinForm.touched.password && signinForm.errors.password !== undefined}
-          helperText={signinForm.touched.password && signinForm.errors.password}
-        />
-      </Stack>
+          size="large"
+          variant="contained"
+          sx={{ marginTop: 4 }}
+          loading={isLoginRequest}>
+          sign in
+        </LoadingButton>
 
-      <LoadingButton
-        type="submit"
-        fullWidth
-        size="large"
-        variant="contained"
-        sx={{ marginTop: 4 }}
-        loading={isLoginRequest}>
-        sign in
-      </LoadingButton>
+        <Button fullWidth sx={{ marginTop: 1 }} onClick={() => switchFun()}>
+          sign up
+        </Button>
 
-      <Button fullWidth sx={{ marginTop: 1 }} onClick={() => switchFun}>
-        sign up
-      </Button>
-
-      {errorMessage && (
-        <Box sx={{ marginTop: 2 }}>
-          <Alert severity="error" variant="outlined">
-            {errorMessage}
-          </Alert>
-        </Box>
-      )}
-    </Box>
+        {errorMessage && (
+          <Box sx={{ marginTop: 2 }}>
+            <Alert severity="error" variant="outlined">
+              {errorMessage}
+            </Alert>
+          </Box>
+        )}
+      </Box>
+    </>
   );
 };
 

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAuthModalOpen } from '../../redux/features/authModalSlice';
 import SigninForm from '../signForm/signInForm';
 import SignupForm from '../signForm/signUpForm';
+import MovieIcon from '@mui/icons-material/Movie';
+import Typography from '@mui/material/Typography';
 
 const actionState = {
   signin: 'signin',
@@ -36,7 +38,19 @@ const AuthModal = () => {
           outline: 'none',
         }}>
         <Box sx={{ padding: 4, boxShadow: 24, backgroundColor: 'background.paper' }}>
-          <Box sx={{ textAlign: 'center', marginBottom: '2rem' }}></Box>
+          <Box sx={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <MovieIcon />
+            <Typography
+              variant="h6"
+              sx={{
+                fontFamily: 'monospace',
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}>
+              iMovies
+            </Typography>
+          </Box>
 
           {action === actionState.signin && (
             <SigninForm switchFun={() => switchAuthState(actionState.signup)} />
