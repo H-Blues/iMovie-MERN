@@ -53,9 +53,22 @@ router.put('/:id', async (req, res) => {
     _id: req.params.id,
   }, req.body);
   if (result.matchedCount) {
-    res.status(200).json({ code: 200, msg: 'User Updated Sucessfully' });
+    res.status(200).json({ success: true, msg: 'User Updated Sucessfully' });
   } else {
-    res.status(404).json({ code: 404, msg: 'Unable to Update User' });
+    res.status(404).json({ success: false, msg: 'Unable to Update User' });
+  }
+});
+
+// Delete a user
+router.delete('/:id', async (req, res) => {
+  const user = await User.findOne({
+    id: req.params.id,
+  });
+  if (!user) {
+    res.status(404).json({ success: false, msg: 'Unable to Find the User' });
+  } else {
+    await user.remove();
+    res.status(200).json({ success: true, msg: 'User Deleted Sucessfully' });
   }
 });
 
