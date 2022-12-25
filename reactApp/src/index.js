@@ -19,6 +19,7 @@ const PopularTVPage = lazy(() => import('./pages/TV/PopularTVPage'));
 const PopularPeoplePage = lazy(() => import('./pages/People/PopularPeoplePage'));
 const ItemDetailPage = lazy(() => import('./pages/Detail/ItemDetailPage'));
 const PeopleDetailPage = lazy(() => import('./pages/Detail/PeopleDetailPage'));
+const Profile = lazy(() => import('./pages/Account/Profile'));
 const MyFavorite = lazy(() => import('./pages/Account/MyFavorite'));
 
 const queryClient = new QueryClient({
@@ -54,6 +55,7 @@ const App = () => {
                   <Route path="/tv/:id" element={<ItemDetailPage type='tv' />} />
                   <Route path="/people" element={<PopularPeoplePage />} />
                   <Route path="/people/:id" element={<PeopleDetailPage />} />
+                  <Route path="/account/profile" element={<Profile />} />
                   <Route path="/account/favourite" element={<MyFavorite />} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>

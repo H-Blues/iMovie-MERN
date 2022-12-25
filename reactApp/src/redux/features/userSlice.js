@@ -3,7 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userSlice = createSlice({
   name: "User",
   initialState: {
-    userInfo: null,
+    userInfo: {
+      id: '',
+      username: 'Zihan',
+      email: 'example@mail.com',
+      address: 'Waterford, Ireland',
+      phone: '353 123456',
+      pic: ''
+    },
     authToken: localStorage.getItem('token'),
     isAuthenticated: false
   },

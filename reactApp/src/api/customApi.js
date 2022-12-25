@@ -27,3 +27,12 @@ export const updateUserInfo = () => {
     body: JSON.stringify({})
   });
 };
+
+export const deleteOneUser = (userId) => {
+  return fetch(`/api/users/${userId}`, {
+    headers: {
+      'Context-Type': 'application/json'
+    },
+    method: 'delete',
+  }).then(res => res.json());
+};
