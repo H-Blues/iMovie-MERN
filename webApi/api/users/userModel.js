@@ -7,6 +7,8 @@ const UserSchema = new Schema({
   username: { type: String, unique: true, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  address: { type: String },
+  phone: { type: String },
   favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movies' }]
 });
 

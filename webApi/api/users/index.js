@@ -47,7 +47,7 @@ router.post('/', asyncHandler(async (req, res, next) => {
 }));
 
 // Update a user
-router.put('/:id', async (req, res) => {
+router.put('/:id', asyncHandler(async (req, res) => {
   if (req.body._id) delete req.body._id;
   const result = await User.updateOne({
     _id: req.params.id,
@@ -57,10 +57,10 @@ router.put('/:id', async (req, res) => {
   } else {
     res.status(404).json({ success: false, msg: 'Unable to Update User' });
   }
-});
+}));
 
 // Delete a user
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', asyncHandler(async (req, res) => {
   const user = await User.findOne({
     id: req.params.id,
   });
@@ -70,7 +70,14 @@ router.delete('/:id', async (req, res) => {
     await user.remove();
     res.status(200).json({ success: true, msg: 'User Deleted Sucessfully' });
   }
-});
+}));
+
+// Find favourites
+router.get('/:userName/favourites', asyncHandler(async (req, res) => {
+  const userName = req.params.userName;
+  const user = await User.findByUserName(userName).populate('favourites');
+  res.status(200).json(user.favourites);
+}));
 
 //Add a favourite. No Error Handling Yet. Can add duplicates too!
 router.post('/:userName/favourites', asyncHandler(async (req, res) => {
@@ -88,12 +95,18 @@ router.post('/:userName/favourites', asyncHandler(async (req, res) => {
 }));
 
 // Remove a favourite.
-
-// Find favourites
-router.get('/:userName/favourites', asyncHandler(async (req, res) => {
+router.delete('/:userName/favourites', asyncHandler(async (req, res) => {
+  const removeFavourite = req.body.id;
   const userName = req.params.userName;
-  const user = await User.findByUserName(userName).populate('favourites');
-  res.status(200).json(user.favourites);
+  const movie = await movieModel.findByMovieDBId(removeFavourite);
+  const user = await User.findByUserName(userName);
+  if (user.favourites.includes(movie._id)) {
+    await user.favourites.filter(e => e._id.toString() !== movie._id.toString());
+    await user.save();
+    res.status(201).json({ success: true, msg: "Movie Deleted Success" });
+  } else {
+    res.status(401).json({ success: false, msg: "This movie is not in favourite list" });
+  }
 }));
 
 export default router;
