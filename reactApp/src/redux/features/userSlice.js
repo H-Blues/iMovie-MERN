@@ -4,10 +4,10 @@ export const userSlice = createSlice({
   name: "User",
   initialState: {
     userInfo: {
-      username: 'Default User',
-      email: 'example@mail.com',
-      address: 'Waterford, Ireland',
-      phone: '353 123456',
+      username: '',
+      email: '',
+      address: '',
+      phone: '',
     },
     authToken: localStorage.getItem('token'),
     isAuthenticated: false

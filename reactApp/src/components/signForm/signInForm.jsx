@@ -25,7 +25,11 @@ const SigninForm = ({ switchFun }) => {
         .required('Username is required.'),
       password: Yup.string()
         .min(5, 'password minimum 5 characters')
-        .required('Password is required.'),
+        .required('Password is required.')
+        .matches(
+          /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/,
+          'Password must contain at least 5 characters, at least 1 letter and 1 number.'
+        ),
     }),
     onSubmit: async (values) => {
       setErrorMessage(undefined);
