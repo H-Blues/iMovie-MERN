@@ -1,5 +1,6 @@
 import React, { useContext, lazy, Suspense } from 'react';
 import { useQueries } from 'react-query';
+import { useSelector } from 'react-redux';
 import { MoviesContext } from '../../contexts/moviesContext';
 import { getMovie } from '../../api/tmdbApi';
 import { Typography } from '@mui/material';
@@ -12,6 +13,8 @@ const Spinner = lazy(() => import('../../components/spinner'));
 
 const MyFavorite = () => {
   const { movieFavorites: movieIds } = useContext(MoviesContext);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+
   const favoriteMovieQueries = useQueries(
     movieIds.map((movieId) => {
       return {
@@ -51,44 +54,34 @@ const MyFavorite = () => {
       <Typography gutterBottom variant="h2" component="p" sx={{ textAlign: 'center' }}>
         My Favorite
       </Typography>
-
-      <div className="section" style={{ marginBottom: '20px' }}>
-        <div className="sectionHeader" style={styles.sectionHeader}>
-          {movieIds.length > 0 ? (
-            <h2 style={styles.h2}>Favorite Movies</h2>
-          ) : (
-            <h2 style={styles.h2}>Waiting for Adding Favorite Movies</h2>
-          )}
+      {isAuthenticated && (
+        <div className="section" style={{ marginBottom: '20px' }}>
+          <div className="sectionHeader" style={styles.sectionHeader}>
+            {movieIds.length > 0 ? (
+              <h2 style={styles.h2}>Favorite Movies</h2>
+            ) : (
+              <h2 style={styles.h2}>Waiting for Adding Favorite Movies</h2>
+            )}
+          </div>
+          <Swiper
+            style={{ width: '80%', marginTop: '-10%' }}
+            slidesPerView={4}
+            spaceBetween={2}
+            scrollbar={{
+              hide: true,
+            }}
+            loopFillGroupWithBlank={true}
+            modules={[Scrollbar]}>
+            {movies.map((m, i) => (
+              <SwiperSlide key={i} style={{ width: '20%' }}>
+                <Suspense>
+                  <MovieCard key={m.id} movie={m} type="movie" />
+                </Suspense>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
-        <Swiper
-          style={{ width: '80%', marginTop: '-10%' }}
-          slidesPerView={4}
-          spaceBetween={2}
-          scrollbar={{
-            hide: true,
-          }}
-          loopFillGroupWithBlank={true}
-          modules={[Scrollbar]}>
-          {movies.map((m, i) => (
-            <SwiperSlide key={i} style={{ width: '20%' }}>
-              <Suspense>
-                <MovieCard key={m.id} movie={m} type="movie" />
-              </Suspense>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      {/* <div className="section" style={{ marginBottom: '20px' }}>
-        <div className="sectionHeader" style={styles.sectionHeader}>
-          {tvIds.length > 0 ? (
-            <h2 style={styles.h2}>Favorite TV</h2>
-          ) : (
-            <h2 style={styles.h2}>Waiting for Adding Favorite TV</h2>
-          )}
-        </div>
-        <MovieList movies={tv} type="tv" />
-      </div> */}
+      )}
     </>
   );
 };

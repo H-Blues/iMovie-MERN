@@ -21,8 +21,11 @@ const AuthModal = () => {
     if (authModalOpen) setAction(actionState.signin);
   }, [authModalOpen]);
 
-  const handleClose = () => dispatch(setAuthModalOpen(false));
   const switchAuthState = (state) => setAction(state);
+  const handleClose = () => {
+    window.location.href = '/';
+    dispatch(setAuthModalOpen(false));
+  };
 
   return (
     <Modal open={authModalOpen} onClose={handleClose}>

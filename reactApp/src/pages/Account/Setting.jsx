@@ -10,7 +10,7 @@ import { setUserInfo } from '../../redux/features/userSlice';
 
 const Setting = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
 
   const [id] = useState(userInfo._id);
   const [username, setUserName] = useState(userInfo.username);
@@ -64,10 +64,11 @@ const Setting = () => {
   const saveUserInfo = async () => {
     const result = await updateUserInfo(id, username, email, address, phone, pic);
     if (result.success) {
-      toast.success('Update your information successfully');
+      toast.success('Update information successfully');
       dispatch(setUserInfo(result.user));
     } else {
       toast.error(result.msg);
+      toast.error('Username seems to be duplicated');
     }
   };
 
@@ -82,7 +83,7 @@ const Setting = () => {
     if (validResult.success) {
       const updateResult = await updateUserPwd(id, newPwd);
       if (updateResult.success) {
-        toast.success('Update your password successfully');
+        toast.success('Update password successfully');
       } else {
         toast.error(updateResult.msg);
       }
@@ -93,103 +94,111 @@ const Setting = () => {
 
   return (
     <>
-      <div className="setting" style={settingStyle}>
-        <Grid container spacing={10} sx={{ padding: '5%' }}>
-          <Grid item xs={8} container sx={borderStyle}>
-            <Grid item xs={3} sx={{ marginTop: '-20px', paddingBottom: '3%' }}>
-              <h3>Personal Information</h3>
-              <AvatarUploader username={userInfo.username} pic={pic} onChange={onChoose} />
+      {isAuthenticated && (
+        <div className="setting" style={settingStyle}>
+          <Grid container spacing={10} sx={{ padding: '5%' }}>
+            <Grid item xs={8} container sx={borderStyle}>
+              <Grid item xs={3} sx={{ marginTop: '-20px', paddingBottom: '3%' }}>
+                <h3>Personal Information</h3>
+                <AvatarUploader username={userInfo.username} pic={pic} onChange={onChoose} />
+              </Grid>
+              <Grid item xs={8}>
+                <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
+                  <InputLabel>Username</InputLabel>
+                  <OutlinedInput
+                    label="Username"
+                    defaultValue={username}
+                    onChange={(event) => {
+                      setUserName(event.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
+                  <InputLabel>Email</InputLabel>
+                  <OutlinedInput
+                    label="Email"
+                    defaultValue={email}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
+                  <InputLabel>Address</InputLabel>
+                  <OutlinedInput
+                    label="Address"
+                    defaultValue={address}
+                    onChange={(event) => {
+                      setAddress(event.target.value);
+                    }}
+                  />
+                </FormControl>
+                <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
+                  <InputLabel>Phone</InputLabel>
+                  <OutlinedInput
+                    label="Phone"
+                    defaultValue={phone}
+                    onChange={(event) => {
+                      setPhone(event.target.value);
+                    }}
+                  />
+                </FormControl>
+              </Grid>
+              <Stack spacing={5} direction="row" sx={{ margin: '0 3% 3% 35%' }}>
+                <Button variant="contained" onClick={saveUserInfo}>
+                  Save
+                </Button>
+                <Button variant="outlined">Cancel</Button>
+              </Stack>
             </Grid>
-            <Grid item xs={8}>
-              <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
-                <InputLabel>Username</InputLabel>
-                <OutlinedInput
-                  defaultValue={username}
-                  onChange={(event) => {
-                    setUserName(event.target.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
-                <InputLabel>Email</InputLabel>
-                <OutlinedInput
-                  defaultValue={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
-                <InputLabel>Address</InputLabel>
-                <OutlinedInput
-                  defaultValue={address}
-                  onChange={(event) => {
-                    setAddress(event.target.value);
-                  }}
-                />
-              </FormControl>
-              <FormControl sx={{ margin: '10px 10px 10px 0', width: '300px' }}>
-                <InputLabel>Phone</InputLabel>
-                <OutlinedInput
-                  defaultValue={phone}
-                  onChange={(event) => {
-                    setPhone(event.target.value);
-                  }}
-                />
-              </FormControl>
+
+            <Grid item xs={3} sx={borderStyle}>
+              <h3>Preferences</h3>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={languages}
+                sx={{ width: 250, margin: '20px 0' }}
+                renderInput={(params) => <TextField {...params} label="Preferred Language" />}
+              />
+              <p>
+                <i>// Waiting to be finished</i>
+              </p>
             </Grid>
-            <Stack spacing={5} direction="row" sx={{ margin: '0 3% 3% 35%' }}>
-              <Button variant="contained" onClick={saveUserInfo}>
-                Save
-              </Button>
-              <Button variant="outlined">Cancel</Button>
-            </Stack>
-          </Grid>
 
-          <Grid item xs={3} sx={borderStyle}>
-            <h3>Preferences</h3>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={languages}
-              sx={{ width: 250, margin: '20px 0' }}
-              renderInput={(params) => <TextField {...params} label="Preferred Language" />}
-            />
-            <p>
-              <i>// Waiting to be finished</i>
-            </p>
+            <Grid item xs={8} sx={borderStyle}>
+              <h3>Reset Password</h3>
+              <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
+                <InputLabel>Previous Password</InputLabel>
+                <OutlinedInput
+                  label="Previous Password"
+                  type="password"
+                  defaultValue=""
+                  onChange={(event) => {
+                    setPreviousPwd(event.target.value);
+                  }}
+                />
+              </FormControl>
+              <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
+                <InputLabel>New Password</InputLabel>
+                <OutlinedInput
+                  label="New Password"
+                  type="password"
+                  onChange={(event) => {
+                    setNewPwd(event.target.value);
+                  }}
+                />
+              </FormControl>
+              <Stack spacing={5} direction="row" sx={{ margin: '0 3% 3% 35%' }}>
+                <Button variant="contained" onClick={saveUserPwd}>
+                  Save
+                </Button>
+                <Button variant="outlined">Cancel</Button>
+              </Stack>
+            </Grid>
           </Grid>
-
-          <Grid item xs={8} sx={borderStyle}>
-            <h3>Reset Password</h3>
-            <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
-              <InputLabel>Previous Password</InputLabel>
-              <OutlinedInput
-                type="password"
-                defaultValue=""
-                onChange={(event) => {
-                  setPreviousPwd(event.target.value);
-                }}
-              />
-            </FormControl>
-            <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
-              <InputLabel>New Password</InputLabel>
-              <OutlinedInput
-                type="password"
-                onChange={(event) => {
-                  setNewPwd(event.target.value);
-                }}
-              />
-            </FormControl>
-            <Stack spacing={5} direction="row" sx={{ margin: '0 3% 3% 35%' }}>
-              <Button variant="contained" onClick={saveUserPwd}>
-                Save
-              </Button>
-              <Button variant="outlined">Cancel</Button>
-            </Stack>
-          </Grid>
-        </Grid>
-      </div>
+        </div>
+      )}
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Menu from '@mui/material/Menu';
@@ -14,16 +14,36 @@ import Logout from '@mui/icons-material/Logout';
 import { Link } from 'react-router-dom';
 import AuthModal from '../authModal';
 import { setAuthModalOpen } from '../../redux/features/authModalSlice';
+import { setIsAuthenticated, setUserInfo, setToken } from '../../redux/features/userSlice';
+import { toast } from 'react-toastify';
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const dispatch = useDispatch();
   const open = Boolean(anchorEl);
+  const dispatch = useDispatch();
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const logout = () => {
+    toast.info('Logging out...');
+    setIsAuthenticated(false);
+    setUserInfo(null);
+    setToken('');
+    setTimeout(function () {
+      window.location.href = '/';
+    }, 3000);
+  };
+
+  const checkAuthenticated = () => {
+    if (!isAuthenticated) {
+      dispatch(setAuthModalOpen(true));
+    }
   };
 
   return (
@@ -38,7 +58,7 @@ const AccountMenu = () => {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}>
-            <Avatar sx={{ width: 32, height: 32 }}>U</Avatar>
+            <Avatar sx={{ width: 32, height: 32 }}>{userInfo.pic}</Avatar>
           </IconButton>
         </Tooltip>
       </Box>
@@ -76,24 +96,23 @@ const AccountMenu = () => {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
-        <MenuItem onClick={() => dispatch(setAuthModalOpen(true))}>
-          {/* <MenuItem component={Link} to="/account/profile"> */}
+        <MenuItem component={Link} to="/account/profile" onClick={checkAuthenticated}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem component={Link} to="/account/favourite">
+        <MenuItem component={Link} to="/account/favourite" onClick={checkAuthenticated}>
           <ListItemIcon>
             <FavoriteIcon fontSize="small" />
           </ListItemIcon>
           My Favorite
         </MenuItem>
-        <MenuItem component={Link} to="/account/setting">
+        <MenuItem component={Link} to="/account/setting" onClick={checkAuthenticated}>
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={logout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
