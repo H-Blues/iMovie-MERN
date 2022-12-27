@@ -4,12 +4,10 @@ export const userSlice = createSlice({
   name: "User",
   initialState: {
     userInfo: {
-      id: '',
-      username: 'Zihan',
+      username: 'Default User',
       email: 'example@mail.com',
       address: 'Waterford, Ireland',
       phone: '353 123456',
-      pic: ''
     },
     authToken: localStorage.getItem('token'),
     isAuthenticated: false
@@ -17,6 +15,7 @@ export const userSlice = createSlice({
   reducers: {
     setUserInfo: (state, action) => {
       state.userInfo = action.payload;
+      console.log(state.userInfo);
     },
     setToken: (state, action) => {
       localStorage.setItem('token', action.payload);

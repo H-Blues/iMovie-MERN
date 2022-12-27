@@ -21,6 +21,7 @@ const ItemDetailPage = lazy(() => import('./pages/Detail/ItemDetailPage'));
 const PeopleDetailPage = lazy(() => import('./pages/Detail/PeopleDetailPage'));
 const Profile = lazy(() => import('./pages/Account/Profile'));
 const MyFavorite = lazy(() => import('./pages/Account/MyFavorite'));
+const Setting = lazy(() => import('./pages/Account/Setting'));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -57,6 +58,7 @@ const App = () => {
                   <Route path="/people/:id" element={<PeopleDetailPage />} />
                   <Route path="/account/profile" element={<Profile />} />
                   <Route path="/account/favourite" element={<MyFavorite />} />
+                  <Route path="/account/setting" element={<Setting />} />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
               </Suspense>

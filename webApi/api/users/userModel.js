@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   address: { type: String },
   phone: { type: String },
+  pic: { type: String },
   favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movies' }]
 });
 

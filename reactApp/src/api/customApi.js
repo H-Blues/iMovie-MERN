@@ -18,14 +18,18 @@ export const signup = (username, email, password) => {
   }).then(res => res.json());
 };
 
-export const updateUserInfo = () => {
-  return fetch('/api/users/:id', {
-    headers: {
-      'Context-Type': 'application/json'
-    },
+export const updateUserInfo = (userId, username, email, address, phone, pic) => {
+  return fetch(`/api/users/${userId}`, {
+    headers: new Headers({ "Content-Type": "application/json" }),
     method: 'put',
-    body: JSON.stringify({})
-  });
+    body: JSON.stringify({
+      username: username,
+      email: email,
+      address: address,
+      phone: phone,
+      pic: pic
+    })
+  }).then(res => res.json());
 };
 
 export const deleteOneUser = (userId) => {

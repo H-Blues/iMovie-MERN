@@ -49,11 +49,19 @@ router.post('/', asyncHandler(async (req, res, next) => {
 // Update a user
 router.put('/:id', asyncHandler(async (req, res) => {
   if (req.body._id) delete req.body._id;
-  const result = await User.updateOne({
-    _id: req.params.id,
-  }, req.body);
-  if (result.matchedCount) {
-    res.status(200).json({ success: true, msg: 'User Updated Sucessfully' });
+  const user = await User.findById(req.params.id);
+  if (user) {
+    if (!req.body.password) {
+      user.username = req.body.username;
+      user.email = req.body.email;
+      user.address = req.body.address;
+      user.phone = req.body.phone;
+      user.pic = req.body.pic;
+    } else {
+      user.password = req.body.password;
+    }
+    await user.save();
+    res.status(200).json({ success: true, msg: 'User Information Updated Sucessfully', user: user });
   } else {
     res.status(404).json({ success: false, msg: 'Unable to Update User' });
   }

@@ -77,6 +77,7 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
         <MenuItem onClick={() => dispatch(setAuthModalOpen(true))}>
+          {/* <MenuItem component={Link} to="/account/profile"> */}
           <Avatar /> Profile
         </MenuItem>
         <Divider />
@@ -86,7 +87,7 @@ const AccountMenu = () => {
           </ListItemIcon>
           My Favorite
         </MenuItem>
-        <MenuItem>
+        <MenuItem component={Link} to="/account/setting">
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
