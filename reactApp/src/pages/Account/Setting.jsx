@@ -1,22 +1,25 @@
 import { React, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Button, Grid, Stack } from '@mui/material';
 import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
-import { updateUserInfo } from '../../api/customApi';
+import { Autocomplete, TextField } from '@mui/material';
+import { login, updateUserInfo, updateUserPwd } from '../../api/customApi';
 import AvatarUploader from '../../components/avatarUploader';
-import { toast } from 'react-toastify';
 import { setUserInfo } from '../../redux/features/userSlice';
 
 const Setting = () => {
   const dispatch = useDispatch();
-
   const { userInfo } = useSelector((state) => state.user);
-  const [id, setId] = useState(userInfo._id);
+
+  const [id] = useState(userInfo._id);
   const [username, setUserName] = useState(userInfo.username);
   const [email, setEmail] = useState(userInfo.email);
   const [address, setAddress] = useState(userInfo.address);
   const [phone, setPhone] = useState(userInfo.phone);
   const [pic, setPic] = useState(userInfo.pic);
+  const [previousPwd, setPreviousPwd] = useState('');
+  const [newPwd, setNewPwd] = useState('');
 
   const settingStyle = {
     display: 'block',
@@ -25,6 +28,14 @@ const Setting = () => {
     margin: '2% 5%',
     borderRadius: '20px',
     overflow: 'auto',
+  };
+
+  const borderStyle = {
+    border: '2px solid #C0C0C0',
+    borderRadius: '5px',
+    marginBottom: '20px',
+    marginRight: '40px',
+    boxShadow: '0 0 20px rgba(0, 0, 0, 0.08)',
   };
 
   const onChoose = (e) => {
@@ -38,29 +49,53 @@ const Setting = () => {
     }
     const reader = new FileReader();
     reader.onload = () => {
-      console.log(reader.result);
       setPic(reader.result.toString());
       e.target.value = '';
     };
     reader.readAsDataURL(files[0]);
   };
 
+  const languages = [
+    { label: 'English', code: 'en-US' },
+    { label: '简体中文', code: 'zh-CN' },
+    { label: 'Française', code: 'fr' },
+  ];
+
   const saveUserInfo = async () => {
     const result = await updateUserInfo(id, username, email, address, phone, pic);
     if (result.success) {
-      toast.success('Update user information successfully');
+      toast.success('Update your information successfully');
       dispatch(setUserInfo(result.user));
-      console.log(result.user);
     } else {
       toast.error(result.msg);
+    }
+  };
+
+  const saveUserPwd = async () => {
+    let validNewPwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/.test(newPwd);
+    let validPrePwd = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$/.test(previousPwd);
+    if (!validNewPwd || !validPrePwd) {
+      toast.error('Password is at least 5 characters with 1 letter and 1 number');
+      return;
+    }
+    const validResult = await login(userInfo.username, previousPwd);
+    if (validResult.success) {
+      const updateResult = await updateUserPwd(id, newPwd);
+      if (updateResult.success) {
+        toast.success('Update your password successfully');
+      } else {
+        toast.error(updateResult.msg);
+      }
+    } else {
+      toast.error(validResult.msg);
     }
   };
 
   return (
     <>
       <div className="setting" style={settingStyle}>
-        <Grid container spacing={5} sx={{ padding: '5%' }}>
-          <Grid item xs={8} container sx={{ boxShadow: '0 0 50px rgba(0, 0, 0, 0.08)' }}>
+        <Grid container spacing={10} sx={{ padding: '5%' }}>
+          <Grid item xs={8} container sx={borderStyle}>
             <Grid item xs={3} sx={{ marginTop: '-20px', paddingBottom: '3%' }}>
               <h3>Personal Information</h3>
               <AvatarUploader username={userInfo.username} pic={pic} onChange={onChoose} />
@@ -110,11 +145,48 @@ const Setting = () => {
               <Button variant="outlined">Cancel</Button>
             </Stack>
           </Grid>
-          <Grid item xs={4}>
-            balabala
+
+          <Grid item xs={3} sx={borderStyle}>
+            <h3>Preferences</h3>
+            <Autocomplete
+              disablePortal
+              id="combo-box-demo"
+              options={languages}
+              sx={{ width: 250, margin: '20px 0' }}
+              renderInput={(params) => <TextField {...params} label="Preferred Language" />}
+            />
+            <p>
+              <i>// Waiting to be finished</i>
+            </p>
           </Grid>
-          <Grid item xs={8}>
-            balabala
+
+          <Grid item xs={8} sx={borderStyle}>
+            <h3>Reset Password</h3>
+            <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
+              <InputLabel>Previous Password</InputLabel>
+              <OutlinedInput
+                type="password"
+                defaultValue=""
+                onChange={(event) => {
+                  setPreviousPwd(event.target.value);
+                }}
+              />
+            </FormControl>
+            <FormControl sx={{ margin: '20px 30px 20px 20px', width: '400px' }}>
+              <InputLabel>New Password</InputLabel>
+              <OutlinedInput
+                type="password"
+                onChange={(event) => {
+                  setNewPwd(event.target.value);
+                }}
+              />
+            </FormControl>
+            <Stack spacing={5} direction="row" sx={{ margin: '0 3% 3% 35%' }}>
+              <Button variant="contained" onClick={saveUserPwd}>
+                Save
+              </Button>
+              <Button variant="outlined">Cancel</Button>
+            </Stack>
           </Grid>
         </Grid>
       </div>

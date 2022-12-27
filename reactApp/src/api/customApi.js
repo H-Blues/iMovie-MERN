@@ -32,6 +32,16 @@ export const updateUserInfo = (userId, username, email, address, phone, pic) => 
   }).then(res => res.json());
 };
 
+export const updateUserPwd = (userId, password) => {
+  return fetch(`/api/users/${userId}`, {
+    headers: new Headers({ "Content-Type": "application/json" }),
+    method: 'put',
+    body: JSON.stringify({
+      password: password,
+    })
+  }).then(res => res.json());
+};
+
 export const deleteOneUser = (userId) => {
   return fetch(`/api/users/${userId}`, {
     headers: {
