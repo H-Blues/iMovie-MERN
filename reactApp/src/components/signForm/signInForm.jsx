@@ -38,8 +38,8 @@ const SigninForm = ({ switchFun }) => {
       setIsLoginRequest(false);
       if (response.success) {
         signinForm.resetForm();
-        dispatch(setToken(response.token));
-        dispatch(setUserInfo(response.user));
+        dispatch(setToken(response.data.token));
+        dispatch(setUserInfo(response.data.user));
         dispatch(setIsAuthenticated(true));
         toast.success('Sign in success');
         dispatch(setAuthModalOpen(false));

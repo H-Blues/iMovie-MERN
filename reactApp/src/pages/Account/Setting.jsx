@@ -65,10 +65,9 @@ const Setting = () => {
     const result = await updateUserInfo(id, username, email, address, phone, pic);
     if (result.success) {
       toast.success('Update information successfully');
-      dispatch(setUserInfo(result.user));
+      dispatch(setUserInfo(result.data.user));
     } else {
       toast.error(result.msg);
-      toast.error('Username seems to be duplicated');
     }
   };
 
