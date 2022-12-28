@@ -1,3 +1,4 @@
+import { stepButtonClasses } from "@mui/material";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const favouriteSlice = createSlice({
@@ -9,6 +10,7 @@ export const favouriteSlice = createSlice({
   reducers: {
     setFavouriteList: (state, action) => {
       state.favouriteList = action.payload;
+      state.favouriteLength = state.favouriteList.length;
     },
     addToFavourite: (state, action) => {
       state.favouriteList = [action.payload, ...state.favouriteList];
