@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import { login } from '../../api/customApi';
 import { setAuthModalOpen } from '../../redux/features/authModalSlice';
+import { setFavouriteList } from '../../redux/features/favouriteSlice';
 import { setUserInfo, setToken, setIsAuthenticated } from '../../redux/features/userSlice';
 
 const SigninForm = ({ switchFun }) => {
@@ -40,6 +41,7 @@ const SigninForm = ({ switchFun }) => {
         signinForm.resetForm();
         dispatch(setToken(response.data.token));
         dispatch(setUserInfo(response.data.user));
+        dispatch(setFavouriteList(response.data.user.favourites));
         dispatch(setIsAuthenticated(true));
         toast.success('Sign in success');
         dispatch(setAuthModalOpen(false));

@@ -50,3 +50,34 @@ export const deleteOneUser = (userId) => {
     method: 'delete',
   }).then(res => res.json());
 };
+
+export const getFavourites = (username) => {
+  return fetch(`/api/favourites/${username}`, {
+    headers: {
+      'Authorization': window.localStorage.getItem('token')
+    },
+    method: 'get',
+  }).then(res => res.json());
+};
+
+export const addFavourite = (username, id) => {
+  return fetch(`/api/favourites/${username}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('token')
+    },
+    method: 'post',
+    body: JSON.stringify({ id: id })
+  }).then(res => res.json());
+};
+
+export const removeFavourite = (username, id) => {
+  return fetch(`/api/favourites/${username}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('token')
+    },
+    method: 'delete',
+    body: JSON.stringify({ id: id })
+  }).then(res => res.json());
+};

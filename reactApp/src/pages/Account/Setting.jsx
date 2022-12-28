@@ -161,7 +161,7 @@ const Setting = () => {
                 renderInput={(params) => <TextField {...params} label="Preferred Language" />}
               />
               <p>
-                <i>// Waiting to be finished</i>
+                <i>Waiting to be finished</i>
               </p>
             </Grid>
 

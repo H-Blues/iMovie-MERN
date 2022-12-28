@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   address: { type: String },
   phone: { type: String },
   pic: { type: String },
-  favourites: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movies' }]
+  favourites: [{ type: Number }]
 });
 
 UserSchema.statics.findByUserName = function (username) {

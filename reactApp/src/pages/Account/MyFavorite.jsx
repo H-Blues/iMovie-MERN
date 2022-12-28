@@ -1,7 +1,6 @@
-import React, { useContext, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { useQueries } from 'react-query';
 import { useSelector } from 'react-redux';
-import { MoviesContext } from '../../contexts/moviesContext';
 import { getMovie } from '../../api/tmdbApi';
 import { Typography } from '@mui/material';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -12,11 +11,11 @@ const MovieCard = lazy(() => import('../../components/movieCard'));
 const Spinner = lazy(() => import('../../components/spinner'));
 
 const MyFavorite = () => {
-  const { movieFavorites: movieIds } = useContext(MoviesContext);
-  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated } = useSelector((state) => state.user);
+  const { favouriteList } = useSelector((state) => state.favourites);
 
   const favoriteMovieQueries = useQueries(
-    movieIds.map((movieId) => {
+    favouriteList.map((movieId) => {
       return {
         queryKey: ['movie', { id: movieId }],
         queryFn: getMovie,
@@ -32,9 +31,8 @@ const MyFavorite = () => {
       </Suspense>
     );
   }
-  const movies = favoriteMovieQueries.map((q) => {
-    return q.data;
-  });
+
+  let movies = favoriteMovieQueries.map((q) => q.data);
 
   const styles = {
     sectionHeader: {
@@ -57,7 +55,7 @@ const MyFavorite = () => {
       {isAuthenticated && (
         <div className="section" style={{ marginBottom: '20px' }}>
           <div className="sectionHeader" style={styles.sectionHeader}>
-            {movieIds.length > 0 ? (
+            {favouriteList.length > 0 ? (
               <h2 style={styles.h2}>Favorite Movies</h2>
             ) : (
               <h2 style={styles.h2}>Waiting for Adding Favorite Movies</h2>

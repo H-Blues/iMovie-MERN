@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
-import { MoviesContext } from '../../contexts/moviesContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFavourite, removeFavourite } from '../../api/customApi';
 import { getCredits } from '../../api/tmdbApi';
 import defaultPerson from '../../assets/person-dummy.jpg';
 import defaultFilm from '../../assets/film-poster-placeholder.png';
@@ -11,12 +12,16 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import Chip from '@mui/material/Chip';
 import './index.css';
+import { addToFavourite, removeFromFavourite } from '../../redux/features/favouriteSlice';
 
 const DetailTemplate = ({ type, item, id }) => {
-  const context = useContext(MoviesContext);
+  const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.user);
+  const { favouriteList } = useSelector((state) => state.favourites);
   var initial;
-  for (var i = 0; i < context.movieFavorites.length; i++) {
-    if (context.movieFavorites[i] === Number(id)) {
+  for (var i = 0; i < favouriteList.length; i++) {
+    if (favouriteList[i] === Number(id)) {
       initial = true;
       break;
     } else {
@@ -30,16 +35,26 @@ const DetailTemplate = ({ type, item, id }) => {
     getCredits
   );
 
-  const addToFavorite = (e) => {
+  const addToFavorite = async (e) => {
     e.preventDefault();
     setIsFavorite(true);
-    context.addToFavorites(item, type);
+    if (type === 'movie') {
+      const result = await addFavourite(userInfo.username, item.id);
+      if (result.success) {
+        dispatch(addToFavourite(item.id));
+      }
+    }
   };
 
-  const removeFromFavorite = (e) => {
+  const removeFromFavorite = async (e) => {
     e.preventDefault();
     setIsFavorite(false);
-    context.removeFromFavorites(item, type);
+    if (type === 'movie') {
+      const result = await removeFavourite(userInfo.username, item.id);
+      if (result.success) {
+        dispatch(removeFromFavourite(item.id));
+      }
+    }
   };
 
   if (isLoading) {
