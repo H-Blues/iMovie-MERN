@@ -13,11 +13,12 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import Chip from '@mui/material/Chip';
 import './index.css';
 import { addToFavourite, removeFromFavourite } from '../../redux/features/favouriteSlice';
+import { setAuthModalOpen } from '../../redux/features/authModalSlice';
 
 const DetailTemplate = ({ type, item, id }) => {
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
   const { favouriteList } = useSelector((state) => state.favourites);
   var initial;
   for (var i = 0; i < favouriteList.length; i++) {
@@ -37,22 +38,30 @@ const DetailTemplate = ({ type, item, id }) => {
 
   const addToFavorite = async (e) => {
     e.preventDefault();
-    setIsFavorite(true);
-    if (type === 'movie') {
-      const result = await addFavourite(userInfo.username, item.id);
-      if (result.success) {
-        dispatch(addToFavourite(item.id));
+    if (!isAuthenticated) {
+      dispatch(setAuthModalOpen(true));
+    } else {
+      setIsFavorite(true);
+      if (type === 'movie') {
+        const result = await addFavourite(userInfo.username, item.id);
+        if (result.success) {
+          dispatch(addToFavourite(item.id));
+        }
       }
     }
   };
 
   const removeFromFavorite = async (e) => {
     e.preventDefault();
-    setIsFavorite(false);
-    if (type === 'movie') {
-      const result = await removeFavourite(userInfo.username, item.id);
-      if (result.success) {
-        dispatch(removeFromFavourite(item.id));
+    if (!isAuthenticated) {
+      dispatch(setAuthModalOpen(true));
+    } else {
+      setIsFavorite(false);
+      if (type === 'movie') {
+        const result = await removeFavourite(userInfo.username, item.id);
+        if (result.success) {
+          dispatch(removeFromFavourite(item.id));
+        }
       }
     }
   };
