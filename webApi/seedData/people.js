@@ -1,0 +1,81 @@
+const people = [
+  {
+    "adult": false,
+    "biography": "Dariusz Adam Wolski (born 7 May 1956) is a Polish film and music video cinematographer. He is known for his work as the cinematographer on the Pirates of the Caribbean film series and on Alex Proyas' cult classics The Crow and Dark City. Many of his collaborations include working with film directors like Ridley Scott, Rob Marshall, Tony Scott, Gore Verbinski and Tim Burton. He has been a member of the American Society of Cinematographers since 1996 and a member of the Academy of Motion Picture Arts and Sciences since 2004. Along with working with many film directors, Wolski has also worked on several music videos with artists such as Elton John, Eminem, David Bowie, Sting, Aerosmith, and Neil Young.",
+    "birthday": "1956-05-07",
+    "deathday": null,
+    "gender": 2,
+    "homepage": null,
+    "id": 120,
+    "imdb_id": "nm0003011",
+    "known_for_department": "Camera",
+    "name": "Dariusz Wolski",
+    "place_of_birth": "Warsaw, Poland",
+    "popularity": 2.351,
+    "profile_path": "/4LD7NmEu1JV7TLLOsG6VJzhvz0t.jpg"
+  },
+  {
+    "birthday": "1963-12-18",
+    "known_for_department": "Acting",
+    "deathday": null,
+    "id": 287,
+    "name": "Brad Pitt",
+    "gender": 2,
+    "biography": "William Bradley \"Brad\" Pitt (born December 18, 1963) is an American actor and film producer. Pitt has received two Academy Award nominations and four Golden Globe Award nominations, winning one. He has been described as one of the world's most attractive men, a label for which he has received substantial media attention. Pitt began his acting career with television guest appearances, including a role on the CBS prime-time soap opera Dallas in 1987. He later gained recognition as the cowboy hitchhiker who seduces Geena Davis's character in the 1991 road movie Thelma & Louise. Pitt's first leading roles in big-budget productions came with A River Runs Through It (1992) and Interview with the Vampire (1994). He was cast opposite Anthony Hopkins in the 1994 drama Legends of the Fall, which earned him his first Golden Globe nomination. In 1995 he gave critically acclaimed performances in the crime thriller Seven and the science fiction film 12 Monkeys, the latter securing him a Golden Globe Award for Best Supporting Actor and an Academy Award nomination.\n\nFour years later, in 1999, Pitt starred in the cult hit Fight Club. He then starred in the major international hit as Rusty Ryan in Ocean's Eleven (2001) and its sequels, Ocean's Twelve (2004) and Ocean's Thirteen (2007). His greatest commercial successes have been Troy (2004) and Mr. & Mrs. Smith (2005).\n\nPitt received his second Academy Award nomination for his title role performance in the 2008 film The Curious Case of Benjamin Button. Following a high-profile relationship with actress Gwyneth Paltrow, Pitt was married to actress Jennifer Aniston for five years. Pitt lives with actress Angelina Jolie in a relationship that has generated wide publicity. He and Jolie have six children—Maddox, Pax, Zahara, Shiloh, Knox, and Vivienne.\n\nSince beginning his relationship with Jolie, he has become increasingly involved in social issues both in the United States and internationally. Pitt owns a production company named Plan B Entertainment, whose productions include the 2007 Academy Award winning Best Picture, The Departed.",
+    "popularity": 10.647,
+    "place_of_birth": "Shawnee, Oklahoma, USA",
+    "profile_path": "/kU3B75TyRiCgE270EyZnHjfivoq.jpg",
+    "adult": false,
+    "imdb_id": "nm0000093",
+    "homepage": null
+  },
+  {
+    "adult": false,
+    "also_known_as": [],
+    "biography": "​From Wikipedia, the free encyclopedia.  \n\nWilliam John \"Bill\" Hunter (27 February 1940 – 21 May 2011) was an Australian actor of film, stage and television. He appeared in more than 60 films and won two Australian Film Institute Awards.\n\nDescription above from the Wikipedia article Bill Hunter (actor), licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+    "birthday": "1940-02-27",
+    "deathday": "2011-05-21",
+    "gender": 2,
+    "homepage": null,
+    "id": 23,
+    "imdb_id": "nm0402730",
+    "known_for_department": "Acting",
+    "name": "Bill Hunter",
+    "place_of_birth": "Ballarat, Victoria, Australia",
+    "popularity": 3.936,
+    "profile_path": "/gvrRsTfx47KupgRwTKp0gqryHPe.jpg"
+  },
+  {
+    "adult": false,
+    "also_known_as": [],
+    "biography": "",
+    "birthday": "1992-06-02",
+    "deathday": null,
+    "gender": 1,
+    "homepage": null,
+    "id": 55,
+    "imdb_id": "nm1659629",
+    "known_for_department": "Acting",
+    "name": "Abigail Stone",
+    "place_of_birth": null,
+    "popularity": 0.608,
+    "profile_path": null
+  },
+  {
+    "adult": false,
+    "biography": "From Wikipedia, the free encyclopedia\n\nFriedrich Rudolf Klein-Rogge (24 November 1885 – 29 May 1955) was a German film actor. Klein-Rogge is known for playing sinister figures in films in the 1920s and 1930s as well as being a mainstay in director Fritz Lang's Weimar-era films. He is probably best known in popular culture, particularly to English-speaking audiences, for playing the archetypal mad scientist role of C. A. Rotwang in Lang's Metropolis and as the criminal genius Doctor Mabuse.",
+    "birthday": "1885-11-24",
+    "deathday": "1955-05-29",
+    "gender": 2,
+    "homepage": null,
+    "id": 77,
+    "imdb_id": "nm0459030",
+    "known_for_department": "Acting",
+    "name": "Rudolf Klein-Rogge",
+    "place_of_birth": "Cologne, Germany",
+    "popularity": 4.14,
+    "profile_path": "/ua4GhFTM7uQqlM0RnSXEZ5v1kVB.jpg"
+  }
+];
+
+export default people;
