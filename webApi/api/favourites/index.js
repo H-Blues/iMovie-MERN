@@ -1,12 +1,11 @@
 import express from 'express';
 import User from '../users/userModel';
-import movieModel from '../movies/movieModel';
 import responseHandler from '../responseHandler';
 import asyncHandler from 'express-async-handler';
 
 const router = express.Router();
 
-// Find favourites
+// Get favourite list
 router.get('/:userName', asyncHandler(async (req, res) => {
   const userName = req.params.userName;
   const user = await User.findByUserName(userName).populate('favourites');
@@ -23,6 +22,7 @@ router.post('/:userName', asyncHandler(async (req, res) => {
     try {
       await user.favourites.push(newFavourite);
       await user.save();
+      console.info("1 favourite movie added successfully");
       responseHandler.created(res, 'Add favourite successfully');
     } catch (error) {
       responseHandler.error(res, 'Opps, something is wrong...');
@@ -42,6 +42,7 @@ router.delete('/:userName', asyncHandler(async (req, res) => {
     try {
       user.favourites = user.favourites.filter(e => e !== removeFavourite);
       await user.save();
+      console.info("1 favourite movie deleted successfully");
       responseHandler.success(res, "Movie Deleted Success", { favourites: user.favourites });
     } catch (error) {
       responseHandler.error(res, 'Opps, something is wrong...');
