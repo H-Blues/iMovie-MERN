@@ -89,7 +89,7 @@ export const movies = {
   "total_results": 10000
 };
 
-export const movieReviews = {
+export const movieReviewsDB = [{
   "id": 527774,
   "page": 1,
   "results": [
@@ -110,7 +110,7 @@ export const movieReviews = {
   ],
   "total_pages": 1,
   "total_results": 2
-};
+}];
 
 export const movieDetails = {
   "adult": false,
