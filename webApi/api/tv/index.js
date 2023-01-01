@@ -72,7 +72,7 @@ router.get('/:id/credits', asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const tvCredits = await getTvCredits(id);
   if (tvCredits) responseHandler.success(res, 'Get tv credits successfully', tvCredits);
-  else responseHandler.badRequest(res, 'Please pass the right tv id');
+  else responseHandler.notFound(res, 'The resource you requested could not be found.');
 }));
 
 // Get top rated tv

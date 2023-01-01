@@ -28,14 +28,13 @@ router.get('/:id/credits', asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const movieCredits = await getPeopleCredits(id);
   if (movieCredits) responseHandler.success(res, 'Get movie credits successfully', movieCredits);
-  else responseHandler.badRequest(res, 'Please pass the right movie id');
+  else responseHandler.notFound(res, 'The resource you requested could not be found.');
 }));
 
 
 // Get popular people
 router.get('/tmdb/popular', asyncHandler(async (req, res) => {
   const upcomingMovies = await getPopularPeople();
-  res.status(200).json(upcomingMovies);
   if (upcomingMovies) responseHandler.success(res, 'Get upcoming movies successfully', upcomingMovies);
   else responseHandler.error(res, 'Opps, something wrong');
 }));

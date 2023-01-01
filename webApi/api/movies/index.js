@@ -34,7 +34,7 @@ router.get('/:id/reviews', async (req, res) => {
     responseHandler.success(res, 'Find movie reviews successfully', searchedReviews);
   } else {
     // If no match locally, fetch data through tmdb-api
-    console.info("GET api/movies/:id/reviews: fetching reviews from tmdb...");
+    console.info("At GET api/movies/:id/reviews: fetching reviews from tmdb...");
     const movieReviews = await getMovieReviews(id);
     if (movieReviews && movieReviews.id === id) {
       responseHandler.success(res, 'Find movie reviews successfully', movieReviews);
@@ -57,7 +57,7 @@ router.post('/:id/reviews', async (req, res) => {
     responseHandler.created(res, 'Create a review successfully');
   } else {
     // If no match locally, fetch data through tmdb-api and store result
-    console.info("POST api/movies/:id/reviews: fetching reviews from tmdb...");
+    console.info("At POST api/movies/:id/reviews: fetching reviews from tmdb...");
     const thisMovieReviews = await getMovieReviews(id);
     if (thisMovieReviews && thisMovieReviews.id === id) {
       thisMovieReviews.results.push(req.body);
@@ -72,7 +72,7 @@ router.get('/:id/credits', asyncHandler(async (req, res) => {
   const id = parseInt(req.params.id);
   const movieCredits = await getMovieCredits(id);
   if (movieCredits) responseHandler.success(res, 'Get movie credits successfully', movieCredits);
-  else responseHandler.badRequest(res, 'Please pass the right movie id');
+  else responseHandler.notFound(res, 'The resource you requested could not be found.');
 }));
 
 
