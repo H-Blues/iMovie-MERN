@@ -1,0 +1,988 @@
+openapi: 3.0.9
+info:
+  title: iMovie - Find you like
+  description: |-
+    This is an API documentation of my project - iMovie. 
+
+    The web pages without full functions (since APIs haven't been deployed yet) can be visited through this link: [https://imovies-zihan.netlify.app](https://imovies-zihan.netlify.app/)
+
+    Some other useful links:
+    - [iMovie-MERN repository](https://github.com/H-Blues/iMovie-MERN)
+    - [The source API definition for iMovie](https://github.com/H-Blues/iMovie-MERN/tree/main/webApi/api/doc/iMovie-API.yml)
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.1
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:{port}/api
+    variables:
+      port:
+        default: '8080'
+tags:
+  - name: User
+    description: Regular operations about users
+  - name: Favourite
+    description: Access to user's favourite list
+  - name: Movie
+    description: Fetch different data about movies
+  - name: TV
+    description: Fetch different data about TV
+  - name: People
+    description: Fetch different data about people
+  - name: Genre
+    description: Fetch movie and TV genres
+paths:
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      operationId: getUsers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      tags:
+        - User
+      summary: Register / Authenticate a user
+      description: When action is "register", it will register a user, otherwise it is to authenticate
+      operationId: registerUser
+      requestBody:
+        description: Pass username and password
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleUser'
+        required: true
+      responses:
+        '200':
+          description: Successfully authenticate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '201':
+          description: Successfully create
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+  /users/{id}:
+    put:
+      tags:
+        - User
+      summary: Update user information
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to operate
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Pass updated user information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatedUser'
+        required: true
+      responses:
+        '200':
+          description: Successfully update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - User
+      summary: Delete a user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully update
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /favourites/{userName}:
+    get:
+      tags:
+        - Favourite
+      summary: Get the favourite list of the user whose name is {userName}
+      operationId: getFavourites
+      parameters:
+        - name: userName
+          in: path
+          description: Name of user to operate
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Find favourite media successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+    post:
+      tags:
+        - Favourite
+      summary: Add a favourite to list of the user whose name is {userName}
+      operationId: addFavourite
+      parameters:
+        - name: userName
+          in: path
+          description: Name of user to operate
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Pass the movie id to be added
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ID'
+      responses:
+        '200':
+          description: Add favourite successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Movie added is duplicated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+    delete:
+      tags:
+        - Favourite
+      summary: Remove a favourite to list of the user whose name is {userName}
+      operationId: removeFavourite
+      parameters:
+        - name: userName
+          in: path
+          description: Name of user to operate
+          required: true
+          schema:
+            type: string
+      # requestBody:
+      #   description: Pass the movie id to be deleted
+      #   content:
+      #     application/json:
+      #       schema:
+      #         $ref: '#/components/schemas/ID'
+      responses:
+        '200':
+          description: Movie Deleted Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: This movie is not in your favourite list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+
+  /movies:
+    get:
+      tags:
+        - Movie
+      summary: Get all movies stored in database
+      operationId: getMovies
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+  /movies/{id}:
+    get:
+      tags:
+        - Movie
+      summary: Get a specific movie details
+      description: The id in params is the default _id provided in monogoDB
+      operationId: getMovie
+      parameters:
+        - name: id
+          in: path
+          description: ID of movie to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Find movie details successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /movies/{id}/reviews:
+    get:
+      tags:
+        - Movie
+      summary: Get a specific movie reviews
+      description: The id in params is the default _id provided in monogoDB
+      operationId: getMovieReviews
+      parameters:
+        - name: id
+          in: path
+          description: ID of movie to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Find movie reviews successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+    post:
+      tags:
+        - Movie
+      summary: Add a review on a specific movie
+      operationId: addMovieReview
+      parameters:
+        - name: id
+          in: path
+          description: ID of movie to operate
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Pass author and content of the review
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '201':
+          description: Create a review successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /movies/{id}/credits:
+    get:
+      tags:
+        - Movie
+      summary: Get a specific movie credits
+      operationId: getMovieCredits
+      parameters:
+        - name: id
+          in: path
+          description: ID of movie to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get movie credits successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /movies/tmdb/upcoming:
+    get:
+      tags:
+        - Movie
+      summary: Get upcoming movies through TMDB
+      operationId: getUpcomingMovies
+      responses:
+        '200':
+          description: Get upcoming movies successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+  /movies/tmdb/top-rated:
+    get:
+      tags:
+        - Movie
+      summary: Get top-rated movies through TMDB
+      operationId: getTopRatedMovies
+      responses:
+        '200':
+          description: Get top-rated movies successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+
+  /tv:
+    get:
+      tags:
+        - TV
+      summary: Get all TV stored in database
+      operationId: getTVs
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+  /tv/{id}:
+    get:
+      tags:
+        - TV
+      summary: Get a specific TV details
+      description: The id in params is the default _id provided in monogoDB
+      operationId: getTV
+      parameters:
+        - name: id
+          in: path
+          description: ID of TV to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Find TV details successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /tv/{id}/reviews:
+    get:
+      tags:
+        - TV
+      summary: Get a specific TV reviews
+      description: The id in params is the default _id provided in monogoDB
+      operationId: getTVReviews
+      parameters:
+        - name: id
+          in: path
+          description: ID of TV to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Find TV reviews successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+    post:
+      tags:
+        - TV
+      summary: Add a review on a specific TV
+      operationId: addTVReview
+      parameters:
+        - name: id
+          in: path
+          description: ID of TV to operate
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Pass author and content of the review
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Review'
+      responses:
+        '201':
+          description: Create a review successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /tv/{id}/credits:
+    get:
+      tags:
+        - TV
+      summary: Get a specific TV credits
+      operationId: getTVCredits
+      parameters:
+        - name: id
+          in: path
+          description: ID of TV to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get TV credits successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /tv/tmdb/top-rated:
+    get:
+      tags:
+        - TV
+      summary: Get top-rated tv through TMDB
+      operationId: getTopRatedTV
+      responses:
+        '200':
+          description: Get top-rated tv successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+
+  /people:
+    get:
+      tags:
+        - People
+      summary: Get all people stored in database
+      operationId: getPeople
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Problems in server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+  /people/{id}:
+    get:
+      tags:
+        - People
+      summary: Get a specific person details
+      description: The id in params is the default _id provided in monogoDB
+      operationId: getPerson
+      parameters:
+        - name: id
+          in: path
+          description: ID of person to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Find person details successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /people/{id}/credits:
+    get:
+      tags:
+        - People
+      summary: Get a specific person's combined credits
+      operationId: getPeopleCredits
+      parameters:
+        - name: id
+          in: path
+          description: ID of people to operate
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Get people credits successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '404':
+          description: The resource requested could not be found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundResponse'
+      security:
+        - Token: []
+  /people/tmdb/popular:
+    get:
+      tags:
+        - People
+      summary: Get popular people through TMDB
+      operationId: getPopularPeople
+      responses:
+        '200':
+          description: Get popular people successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorised
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - Token: []
+
+  /genre/movies:
+    get:
+      tags:
+        - Genre
+      summary: Get movie genres
+      operationId: getMovieGenre
+      responses:
+        '200':
+          description: Get movie genres successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /genre/tv:
+    get:
+      tags:
+        - Genre
+      summary: Get TV genres
+      operationId: getTVGenres
+      responses:
+        '200':
+          description: Get TV genres successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '500':
+          description: Opps, something wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    ID:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123456
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        msg:
+          type: string
+          example: 'Successfully operate'
+        data:
+          type: object
+          example: { token: '1234567', user: { username: 'user1', email: 'example@mail.com' } }
+    CreatedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        msg:
+          type: string
+          example: 'Successfully create'
+    BadRequestResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        msg:
+          type: string
+          example: 'Please enter right format data'
+    UnauthorizedResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        msg:
+          type: string
+          example: 'Unauthorized'
+    NotFoundResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        msg:
+          type: string
+          example: "The resource doesn't exist"
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        msg:
+          type: string
+          example: 'Opps, something unknown is wrong'
+
+    ExampleUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: test1
+    UpdatedUser:
+      type: object
+      properties:
+        username:
+          type: string
+          example: user1
+        password:
+          type: string
+          example: test1
+        email:
+          type: string
+          example: mymail@mail.com
+        phone:
+          type: string
+          example: '353 123456'
+        address:
+          type: string
+          example: 'Waterford,  Ireland'
+        pic:
+          type: string
+          example: 'base64...'
+
+    Review:
+      type: object
+      properties:
+        author:
+          type: string
+          example: Tom
+        content:
+          type: string
+          example: It is a wonderful movie / TV show
+
+  securitySchemes:
+    Token:
+      type: apiKey
+      name: token
+      in: header
