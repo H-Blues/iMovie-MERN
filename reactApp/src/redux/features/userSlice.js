@@ -10,7 +10,8 @@ export const userSlice = createSlice({
       phone: '',
     },
     authToken: localStorage.getItem('token'),
-    isAuthenticated: false
+    isAuthenticated: false,
+    language: 'en-US'
   },
   reducers: {
     setUserInfo: (state, action) => {
@@ -22,9 +23,12 @@ export const userSlice = createSlice({
     },
     setIsAuthenticated: (state, action) => {
       state.isAuthenticated = action.payload;
+    },
+    setLauguage: (state, action) => {
+      state.language = action.payload;
     }
   }
 });
 
-export const { setUserInfo, setToken, setIsAuthenticated } = userSlice.actions;
+export const { setUserInfo, setToken, setIsAuthenticated, setLauguage } = userSlice.actions;
 export default userSlice.reducer;

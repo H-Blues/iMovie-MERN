@@ -8,6 +8,7 @@ import peopleRouter from './api/people';
 import genresRouter from './api/genres';
 import favouriteRouter from './api/favourites';
 import usersRouter from './api/users';
+import recommendRouter from './api/recommend';
 import './db';
 import './seedData';
 
@@ -35,6 +36,7 @@ app.use('/api/movies', passport.authenticate('jwt', { session: false }), moviesR
 app.use('/api/tv', passport.authenticate('jwt', { session: false }), tvRouter);
 app.use('/api/people', passport.authenticate('jwt', { session: false }), peopleRouter);
 app.use('/api/favourites', passport.authenticate('jwt', { session: false }), favouriteRouter);
+app.use('/api/recommend', passport.authenticate('jwt', { session: false }), recommendRouter);
 app.use(errHandler);
 
 app.listen(port, () => {

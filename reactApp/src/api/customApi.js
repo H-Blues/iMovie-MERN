@@ -99,3 +99,16 @@ export const getTVGenres = async () => {
     method: 'get',
   }).then(res => res.json());
 };
+
+export const getRecommendations = async (args) => {
+  const [, argsPart] = args.queryKey;
+  const list = argsPart.list;
+  return fetch('/api/recommend', {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': window.localStorage.getItem('token')
+    },
+    method: 'post',
+    body: JSON.stringify({ favourites: list })
+  }).then(res => res.json());
+};

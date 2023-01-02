@@ -1,6 +1,20 @@
 import fetch from 'node-fetch';
 const tmdbUrl = 'https://api.themoviedb.org/3';
 
+export const getMovie = async (id) => {
+  return fetch(
+    `${tmdbUrl}/movie/${id}?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US`
+  ).then((response) => {
+    if (!response.ok) {
+      throw new Error(response.json().message);
+    }
+    return response.json();
+  })
+    .catch((error) => {
+      throw error;
+    });
+};
+
 export const getUpcomingMovies = () => {
   return fetch(
     `${tmdbUrl}/movie/upcoming?api_key=${process.env.REACT_APP_TMDB_KEY}&language=en-US&page=1`
