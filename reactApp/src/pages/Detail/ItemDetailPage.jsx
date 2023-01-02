@@ -2,11 +2,13 @@ import React, { lazy, Suspense } from 'react';
 import { useParams } from 'react-router';
 import { useQuery } from 'react-query';
 import { getMovie, getTV } from '../../api/tmdbApi';
+import { useSelector } from 'react-redux';
 const DetailTemplate = lazy(() => import('../../components/templateMovieDetail'));
 const Spinner = lazy(() => import('../../components/spinner'));
 
 const MovieDetailPage = ({ type }) => {
   const { id } = useParams();
+  const { language } = useSelector((state) => state.user);
 
   var getDetailFunction;
   if (type === 'tv') {
@@ -20,7 +22,7 @@ const MovieDetailPage = ({ type }) => {
     error,
     isLoading,
     isError,
-  } = useQuery([`${type}${id}`, { id: id }], getDetailFunction);
+  } = useQuery([`${type}${id}`, { id: id, lang: language }], getDetailFunction);
 
   if (isLoading) {
     return (

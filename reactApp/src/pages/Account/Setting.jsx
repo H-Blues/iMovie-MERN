@@ -6,11 +6,11 @@ import { FormControl, InputLabel, OutlinedInput } from '@mui/material';
 import { Autocomplete, TextField } from '@mui/material';
 import { login, updateUserInfo, updateUserPwd } from '../../api/customApi';
 import AvatarUploader from '../../components/avatarUploader';
-import { setUserInfo } from '../../redux/features/userSlice';
+import { setUserInfo, setLauguage } from '../../redux/features/userSlice';
 
 const Setting = () => {
   const dispatch = useDispatch();
-  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated, language } = useSelector((state) => state.user);
 
   const [id] = useState(userInfo._id);
   const [username, setUserName] = useState(userInfo.username);
@@ -158,10 +158,17 @@ const Setting = () => {
                 id="combo-box-demo"
                 options={languages}
                 sx={{ width: 250, margin: '20px 0' }}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 renderInput={(params) => <TextField {...params} label="Preferred Language" />}
+                onInputChange={(event, value) => {
+                  var code;
+                  if (!value) code = 'en-US';
+                  else code = languages.filter((l) => l.label === value)[0].code;
+                  dispatch(setLauguage(code));
+                }}
               />
               <p>
-                <i>Waiting to be finished</i>
+                Your choice is: <i>{language}</i>
               </p>
             </Grid>
 

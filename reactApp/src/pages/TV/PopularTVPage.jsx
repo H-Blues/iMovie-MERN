@@ -2,17 +2,19 @@ import React, { useState, lazy, Suspense } from 'react';
 import { getPopularTV } from '../../api/tmdbApi';
 import { useQuery } from 'react-query';
 import Pagination from '@mui/material/Pagination';
+import { useSelector } from 'react-redux';
 const PageTemplate = lazy(() => import('../../components/templateMovieList'));
 const Spinner = lazy(() => import('../../components/spinner'));
 
 const PopularTVPage = () => {
+  const { language } = useSelector((state) => state.user);
   let [page, setPage] = useState(1);
   const handleChange = (event, value) => {
     setPage(value);
   };
 
   const { data, error, isLoading, isError } = useQuery(
-    [`popularTV${page}`, { page: page }],
+    [`popularTV${page}`, { page: page, lang: language }],
     getPopularTV
   );
 

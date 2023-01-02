@@ -8,15 +8,29 @@ import './index.css';
 import { Box, Button } from '@mui/material';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const MovieBackdrop = () => {
   const movieIds = [101, 13, 157336, 680];
   const movieKeys = ['/Jcjel7l_7mQ', '/d6A38n0W4u4', '/KlyknsTJk0w', '/tGpTpVyI_OQ'];
+  const { language } = useSelector((state) => state.user);
 
-  var { data: mc1, isLoading: l1 } = useQuery(['mc1', { id: movieIds[0] }], getMovie);
-  var { data: mc2, isLoading: l2 } = useQuery(['mc2', { id: movieIds[1] }], getMovie);
-  var { data: mc3, isLoading: l3 } = useQuery(['mc3', { id: movieIds[2] }], getMovie);
-  var { data: mc4, isLoading: l4 } = useQuery(['mc4', { id: movieIds[3] }], getMovie);
+  var { data: mc1, isLoading: l1 } = useQuery(
+    ['mc1', { id: movieIds[0], lang: language }],
+    getMovie
+  );
+  var { data: mc2, isLoading: l2 } = useQuery(
+    ['mc2', { id: movieIds[1], lang: language }],
+    getMovie
+  );
+  var { data: mc3, isLoading: l3 } = useQuery(
+    ['mc3', { id: movieIds[2], lang: language }],
+    getMovie
+  );
+  var { data: mc4, isLoading: l4 } = useQuery(
+    ['mc4', { id: movieIds[3], lang: language }],
+    getMovie
+  );
 
   if (l1 || l2 || l3 || l4) {
     return <Spinner />;
@@ -44,7 +58,7 @@ const MovieBackdrop = () => {
               <div className="glassbox">
                 <img className="poster" src={imgUrl + mc1.poster_path} alt="poster" />
                 <div className="description">
-                  <h1>{mc1.original_title}</h1>
+                  <h1>{mc1.title}</h1>
                   <p>{mc1.overview}</p>
                   <div className="buttonRow">
                     <Button
@@ -80,7 +94,7 @@ const MovieBackdrop = () => {
               <div className="glassbox">
                 <img className="poster" src={imgUrl + mc2.poster_path} alt="poster" />
                 <div className="description">
-                  <h1>{mc2.original_title}</h1>
+                  <h1>{mc2.title}</h1>
                   <p>{mc2.overview}</p>
                   <div className="buttonRow">
                     <Button
@@ -116,7 +130,7 @@ const MovieBackdrop = () => {
               <div className="glassbox">
                 <img className="poster" src={imgUrl + mc3.poster_path} alt="poster" />
                 <div className="description">
-                  <h1>{mc3.original_title}</h1>
+                  <h1>{mc3.title}</h1>
                   <p>{mc3.overview}</p>
                   <div className="buttonRow">
                     <Button
@@ -152,7 +166,7 @@ const MovieBackdrop = () => {
               <div className="glassbox">
                 <img className="poster" src={imgUrl + mc4.poster_path} alt="poster" />
                 <div className="description">
-                  <h1>{mc4.original_title}</h1>
+                  <h1>{mc4.title}</h1>
                   <p>{mc4.overview}</p>
                   <div className="buttonRow">
                     <Button

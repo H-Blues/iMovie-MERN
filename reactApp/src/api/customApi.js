@@ -81,3 +81,21 @@ export const removeFavourite = (username, id) => {
     body: JSON.stringify({ id: id })
   }).then(res => res.json());
 };
+
+export const getMovieGenres = async () => {
+  return fetch('/api/genres/movie', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'get',
+  }).then(res => res.json());
+};
+
+export const getTVGenres = async () => {
+  return fetch('/api/genres/tv', {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'get',
+  }).then(res => res.json());
+};

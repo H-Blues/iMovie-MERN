@@ -18,7 +18,7 @@ import { setAuthModalOpen } from '../../redux/features/authModalSlice';
 const DetailTemplate = ({ type, item, id }) => {
   const dispatch = useDispatch();
 
-  const { userInfo, isAuthenticated } = useSelector((state) => state.user);
+  const { userInfo, isAuthenticated, language } = useSelector((state) => state.user);
   const { favouriteList } = useSelector((state) => state.favourites);
   var initial;
   for (var i = 0; i < favouriteList.length; i++) {
@@ -32,7 +32,7 @@ const DetailTemplate = ({ type, item, id }) => {
   const [isFavorite, setIsFavorite] = useState(initial);
 
   const { data, error, isLoading, isError } = useQuery(
-    [`${type}${id}Credits`, { type: type }, { id: id }],
+    [`${type}${id}Credits`, { type: type }, { id: id }, { lang: language }],
     getCredits
   );
 

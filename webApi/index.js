@@ -30,10 +30,10 @@ app.use(express.json());  // This line should be before useRoutes -- important
 app.use(passport.initialize());
 
 app.use('/api/users', usersRouter);
+app.use('/api/genres', genresRouter);
 app.use('/api/movies', passport.authenticate('jwt', { session: false }), moviesRouter);
 app.use('/api/tv', passport.authenticate('jwt', { session: false }), tvRouter);
 app.use('/api/people', passport.authenticate('jwt', { session: false }), peopleRouter);
-app.use('/api/genres', passport.authenticate('jwt', { session: false }), genresRouter);
 app.use('/api/favourites', passport.authenticate('jwt', { session: false }), favouriteRouter);
 app.use(errHandler);
 

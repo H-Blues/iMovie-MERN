@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import { useSelector } from 'react-redux';
 import { getCombinedCredits } from '../../api/tmdbApi';
 import defaultPerson from '../../assets/person-dummy.jpg';
 import defaultFilm from '../../assets/film-poster-placeholder.png';
@@ -9,8 +10,9 @@ import Chip from '@mui/material/Chip';
 import './index.css';
 
 const DetailTemplate = ({ person, id }) => {
+  const { language } = useSelector((state) => state.user);
   const { data, error, isLoading, isError } = useQuery(
-    [`person${id}Credits`, { id: id }],
+    [`person${id}Credits`, { id: id, lang: language }],
     getCombinedCredits
   );
 

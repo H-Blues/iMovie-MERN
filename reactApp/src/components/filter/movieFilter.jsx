@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { getMovieGenres } from '../../api/tmdbApi';
+import { getMovieGenres } from '../../api/customApi';
 import { useQuery } from 'react-query';
 import Spinner from '../spinner';
 
@@ -28,7 +28,7 @@ export default function FilterMoviesCard(props) {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  const genres = data.genres;
+  const genres = data;
   if (genres[0].name !== 'All') {
     genres.unshift({ id: '0', name: 'All' });
   }

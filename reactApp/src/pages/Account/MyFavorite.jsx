@@ -11,13 +11,13 @@ const MovieCard = lazy(() => import('../../components/movieCard'));
 const Spinner = lazy(() => import('../../components/spinner'));
 
 const MyFavorite = () => {
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, language } = useSelector((state) => state.user);
   const { favouriteList } = useSelector((state) => state.favourites);
 
   const favoriteMovieQueries = useQueries(
     favouriteList.map((movieId) => {
       return {
-        queryKey: ['movie', { id: movieId }],
+        queryKey: ['movie', { id: movieId, lang: language }],
         queryFn: getMovie,
       };
     })

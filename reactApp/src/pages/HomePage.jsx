@@ -3,16 +3,19 @@ import { getPopularMovies, getTopRatedMovies, getUpcoming, getPopularTV } from '
 import { useQueries } from 'react-query';
 import { Button, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const MovieBackdrop = lazy(() => import('../components/movieBackdrop'));
 const MovieList = lazy(() => import('../components/movieList'));
 const Spinner = lazy(() => import('../components/spinner'));
 
 const HomePage = () => {
+  const { language } = useSelector((state) => state.user);
+
   const results = useQueries([
-    { queryKey: ['popularMovies1', { page: 1 }], queryFn: getPopularMovies },
-    { queryKey: ['topRatedMovies1', { page: 1 }], queryFn: getTopRatedMovies },
-    { queryKey: ['upComingMovies1', { page: 1 }], queryFn: getUpcoming },
-    { queryKey: ['popularTV1', { page: 1 }], queryFn: getPopularTV },
+    { queryKey: ['popularMovies1', { page: 1, lang: language }], queryFn: getPopularMovies },
+    { queryKey: ['topRatedMovies1', { page: 1, lang: language }], queryFn: getTopRatedMovies },
+    { queryKey: ['upComingMovies1', { page: 1, lang: language }], queryFn: getUpcoming },
+    { queryKey: ['popularTV1', { page: 1, lang: language }], queryFn: getPopularTV },
   ]);
 
   if (
