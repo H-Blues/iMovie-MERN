@@ -87,7 +87,7 @@ router.get('/tmdb/upcoming', asyncHandler(async (req, res) => {
 // Get top rated movies
 router.get('/tmdb/top-rated', asyncHandler(async (req, res) => {
   const topRatedMovies = await getTopRatedMovies();
-  if (topRatedMovies) responseHandler.success(res, 'Get upcoming movies successfully', topRatedMovies);
+  if (topRatedMovies) responseHandler.success(res, 'Get top-rated movies successfully', topRatedMovies);
   else responseHandler.error(res, 'Opps, something wrong');
 }));
 

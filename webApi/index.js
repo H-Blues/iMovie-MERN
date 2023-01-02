@@ -12,11 +12,16 @@ import recommendRouter from './api/recommend';
 import './db';
 import './seedData';
 
+const cors = require("cors");
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
 dotenv.config();
 
 const errHandler = (err, req, res, next) => {
-  /* if the error in development then send stack trace to display whole error,
-  if it's in production then just send error message  */
   if (process.env.NODE_ENV === 'production') {
     return res.status(500).json({ success: false, msg: err.stack });
   }
@@ -27,7 +32,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.use(express.json());  // This line should be before useRoutes -- important
-
+app.use(cors(corsOptions));
 app.use(passport.initialize());
 
 app.use('/api/users', usersRouter);
@@ -38,7 +43,6 @@ app.use('/api/people', passport.authenticate('jwt', { session: false }), peopleR
 app.use('/api/favourites', passport.authenticate('jwt', { session: false }), favouriteRouter);
 app.use('/api/recommend', passport.authenticate('jwt', { session: false }), recommendRouter);
 app.use(errHandler);
-
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
 });
