@@ -25,7 +25,7 @@ const Profile = () => {
     handleClose();
     if (!userInfo.id) toast.error('No userId passed');
     else {
-      const response = await deleteOneUser(userInfo.id);
+      const response = await deleteOneUser(userInfo._id);
       if (response.success) {
         toast.success('Delete account success');
         setTimeout(function () {
