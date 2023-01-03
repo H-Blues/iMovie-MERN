@@ -9,11 +9,13 @@ Creator: Zihan Zhang
 - Implement the user's `signup` and `login` functions using related [Modal](https://mui.com/material-ui/react-modal/) MUI components.
 - Profile page showing basic account information.
 - Setting page providing updating operation.
+- [Regular expressions](./webApi/api/users/index.js) used to validate user's input format.
 
 ### Favourite
 
 - Store favourite list of each user in database, providing `add` and `remove` operations.
 - Recommendation page using custom algorithm based on user's favourites. Check more in [Independent learning](#recommend).
+- Improved operation logging
 
 ### Muti-languages
 
