@@ -2,6 +2,10 @@
 
 Creator: Zihan Zhang
 
+Project Demo in YouTuBe: https://youtu.be/W6Nnc1opAnA
+
+Swagger API Demo in YouTube: https://youtu.be/-J2CERl3gQs
+
 ## Features
 
 ### Account
